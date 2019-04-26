@@ -7,10 +7,10 @@ const LocationMarker = (props) => {
       <svg height="60" width="60">
         <circle cx="30" cy="30" r="28" />
         <circle cx="30" cy="30" r="18" />
-        <circle cx="30" cy="30" r="8" />
+        <circle className="inner" cx="30" cy="30" r="8" />
       </svg>
     </div>
   );
-}
+};
 
 export default LocationMarker;
