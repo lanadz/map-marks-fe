@@ -1,0 +1,26 @@
+@import ../values.sass
+
+section.login
+    flex: 1
+    color: white
+    padding: $padding * 2
+    display: flex
+    flex-direction: column
+    justify-content: space-evenly
+    background: linear-gradient($tan-light 20%, #ffffff 50%, $primary 100%) fixed
+
+    .logo
+        width: 60vw
+        max-width: 400px
+        margin: 0 auto
+        display: block
+        margin-bottom: $large-padding
+
+    .form
+        .field
+            .control.has-icons-left .input:focus ~ .icon
+                color: $primary
+
+            .control.has-icons-left
+                .icon
+                    color: $gray

@@ -1,0 +1,40 @@
+@import ../values.sass
+
+.container
+    height: 100%
+    width: 100%
+    overflow: hidden
+    border: 1px solid $primary
+
+    .map-container
+        padding: 0
+        height: calc(100% - 50px)
+
+    .navbar.is-fixed-bottom.always-visible-menu
+        background: $primary
+        height: 50px
+        position: relative
+        display: flex
+
+        .navbar-menu
+            display: flex
+            flex-flow: row nowrap
+            justify-content: space-around
+            width: 100%
+            background-color: $primary
+            box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.3)
+            padding: 0
+
+            .navbar-item
+                color: white
+                display: flex
+                flex: 0 1 auto
+                margin: auto
+                padding: 0
+                .icon
+                    display: inline-flex
+                    width: auto
+                    height: auto
+                    margin: auto
+
+

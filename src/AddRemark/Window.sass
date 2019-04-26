@@ -1,0 +1,40 @@
+@import ../values.sass
+
+.add-remark-dialog.container
+    background: white
+    position: absolute
+    top: 60px
+    height: 50vh
+    transition: top ease 0.3s
+    padding: $padding
+    z-index: 2
+    box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.3)
+    display: flex
+    flex-direction: column
+
+    .delete
+        position: absolute
+        right: $padding
+        background: rgba($primary, 0.7)
+        &:hover
+            background: rgba($primary, 1)
+
+    .form
+        flex: 1
+        margin-top: $padding
+        display: flex
+        flex-direction: column
+
+        .field.textarea-wrapper
+            flex: 1
+
+            .control
+                height: 100%
+
+                .textarea
+                    height: 100%
+                    min-height: 50px
+                    border: none
+
+    &.active
+        top: calc(-50vh + 50px)
