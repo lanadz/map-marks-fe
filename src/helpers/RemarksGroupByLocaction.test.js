@@ -5,16 +5,16 @@ it('groups remarks based on location', () => {
     id: 1,
     user_name: "User 1",
     body: "Text 1",
-    lat: 1.3109734,
-    lng: 103.8951836
+    lat: 1.3108734,
+    lng: 103.8951236
   };
 
   let remark2 = {
     id: 2,
     user_name: "User 1",
     body: "Text 2",
-    lat: 1.3109423999999998,
-    lng: 103.8950867
+    lat: 2.3109423999999998,
+    lng: 105.8950867
   };
 
   let remark3 = {
@@ -27,16 +27,16 @@ it('groups remarks based on location', () => {
 
   let expectedGrouping = [
     {
-      count: 1,
-      lat: 1.3109734,
-      lng: 103.8951836,
-      remarks: [remark1]
+      count: 2,
+      lat: "1.3109",
+      lng: "103.8951",
+      remarks: [remark1, remark3]
     },
     {
-      count: 2,
-      lat: 1.3109423999999998,
-      lng: 103.8950867,
-      remarks: [remark2, remark3]
+      count: 1,
+      lat: "2.3109",
+      lng: "105.8951",
+      remarks: [remark2]
     }
   ];
 
