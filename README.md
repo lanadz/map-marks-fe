@@ -1,4 +1,4 @@
-Both backend and frontend are deployed on Heroku [Demo](https://lanadz-app.herokuapp.com)
+Both backend and frontend are deployed on Heroku [Demo](https://map-marks.herokuapp.com)
 
 Video of workflow [link](https://drive.google.com/open?id=1SCK6vxmxqiyhu9tP3fJVTQcqDdzOl2go)
 
