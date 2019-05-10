@@ -11,7 +11,7 @@ const RemarkerMarker = (props) => {
         <path d="M86.086,215.477l100.47,0.272l-3.67,-9.756l-92.574,-0.023l-4.226,9.507Z" style={{ fill: '#cb6f01' }} />
         <path d="M134.084,221.957c0,0 74.634,-103.272 73.104,-151.054c-1.06,-33.126 -30.183,-68.142 -71.458,-69.138c-43.775,-1.056 -74.759,37.541 -75.683,72.453c-1.177,44.452 74.037,147.739 74.037,147.739Z" style={{ fill: 'url(#_Linear1)', stroke: '#216b8b', strokeWidth: '4.17px' }} />
         <circle cx="132.768" cy="77.726" r="51.294" style={{ fill: '#fdeecf', stroke: '#216b8b', strokeWidth: '4.17px' }} />
-        <text x="110.836px" y="102.819px" style={{ fontFamily: 'Arial', fontSize: '75px' }}>
+        <text x="130.836px" y="102.819px" textAnchor="middle" style={{ fontFamily: 'Arial', fontSize: '75px' }}>
           {props.text}
         </text>
         <defs>
