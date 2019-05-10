@@ -8,14 +8,14 @@
 // }
 //
 
-const RemarksGroupByLocaction = (remarks) => {
+const RemarksGroupByLocaction = (remarks, zoomLevel = 13) => {
   let groupedRemarks = [];
 
   for (let remark of remarks) {
 
     let group = groupedRemarks.find((r) => {
-      return r.lng === proximity(remark.lng)
-          && r.lat === proximity(remark.lat)
+      return r.lng === proximity(remark.lng, zoomLevel)
+          && r.lat === proximity(remark.lat, zoomLevel)
     });
 
     if (group) {
@@ -24,8 +24,8 @@ const RemarksGroupByLocaction = (remarks) => {
     } else {
       groupedRemarks.push({
         count: 1,
-        lng: proximity(remark.lng),
-        lat: proximity(remark.lat),
+        lng: proximity(remark.lng, zoomLevel),
+        lat: proximity(remark.lat, zoomLevel),
         remarks: [remark]
       });
     }
@@ -34,7 +34,7 @@ const RemarksGroupByLocaction = (remarks) => {
   return groupedRemarks;
 };
 
-const proximity = (coord, precision = 4) => {
+const proximity = (coord, zoomLevel) => {
   // decimal
   // places   degrees          distance
   // -------  -------          --------
@@ -47,8 +47,40 @@ const proximity = (coord, precision = 4) => {
   // 6        0.000001         11.1 cm
   // 7        0.0000001        1.11 cm
   // 8        0.00000001       1.11 mm
+let precision = 0;
 
+if (zoomLevel < 11 && zoomLevel >= 1) {
+  precision = 1;
 
+  return coord.toFixed(precision);
+}
+
+switch (zoomLevel) {
+  case 11:
+    precision = 2;
+    break;
+
+  case 12:
+    precision = 3;
+    break;
+
+  case 13:
+  case 14:
+  case 15:
+    precision = 4;
+    break;
+
+  case 16:
+    precision = 5;
+    break;
+
+  case 17:
+    precision = 6;
+    break;
+
+  default:
+    precision = 7;
+}
   return coord.toFixed(precision);
 
 };
