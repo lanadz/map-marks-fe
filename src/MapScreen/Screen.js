@@ -32,7 +32,7 @@ class Screen extends Component {
           <Map
             center={this.props.center}
             zoom={this.props.zoom}
-            onMapCenterChange={this.props.onMapCenterChange}
+            onMapChange={this.props.onMapChange}
             groupedRemarks={this.props.groupedRemarks}
             onMarkerClick={this.props.onMarkerClick}
           />

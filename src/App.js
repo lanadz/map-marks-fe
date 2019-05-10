@@ -23,6 +23,7 @@ class App extends Component {
         lat: 0,
         lng: 0
       },
+      mapZoom: 13,
       remarks: [],
       unfilteredRemarks: [],
       groupedRemarks: [],
@@ -35,7 +36,7 @@ class App extends Component {
     this.login = this.login.bind(this);
     this.remarkSubmit = this.remarkSubmit.bind(this);
     this.getRemarks = this.getRemarks.bind(this);
-    this.mapCenterChanged = this.mapCenterChanged.bind(this);
+    this.mapChanged = this.mapChanged.bind(this);
     this.markerClicked = this.markerClicked.bind(this);
     this.closeListRemarksDialog = this.closeListRemarksDialog.bind(this);
     this.toggleSearchDialog = this.toggleSearchDialog.bind(this);
@@ -89,11 +90,13 @@ class App extends Component {
     );
   }
 
-  mapCenterChanged(currentCenter) {
+  mapChanged(currentMapState) {
     let { mapCenter } = this.state;
-    if (currentCenter.lat !== mapCenter.lat || currentCenter.lng !== mapCenter.lng) {
-      this.getRemarks(currentCenter);
-      this.setState({ mapCenter: currentCenter });
+    let { mapZoom } = this.state;
+
+    if (!Object.is(currentMapState.center, mapCenter) || !Object.is(currentMapState.zoom, mapZoom)) {
+      this.getRemarks(currentMapState);
+      this.setState({ mapCenter: currentMapState.center, mapZoom: currentMapState.zoom });
     }
   }
 
@@ -172,7 +175,7 @@ class App extends Component {
       filteredRemarks = remarksFromApi;
     }
     this.setState({
-      groupedRemarks: RemarksGroupByLocation(filteredRemarks),
+      groupedRemarks: RemarksGroupByLocation(filteredRemarks, this.state.mapZoom),
       remarks: filteredRemarks,
       unfilteredRemarks: remarksFromApi
     });
@@ -182,7 +185,7 @@ class App extends Component {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => this.setCurrentLocation(position));
     } else {
-      console.log('Error: The Geolocation service failed.');
+      console.warn('Error: The Geolocation service failed.');
     }
   }
 
@@ -201,11 +204,11 @@ class App extends Component {
           <Route path="/" exact render={(props) => (
             loggedIn ?
               (<MapScreen
-                zoom={13}
+                zoom={this.state.mapZoom}
                 center={{ lat: this.state.currentLocation.lat, lng: this.state.currentLocation.lng }}
                 username={this.state.user.name}
                 onRemarkSubmit={this.remarkSubmit}
-                onMapCenterChange={this.mapCenterChanged}
+                onMapChange={this.mapChanged}
                 onMarkerClick={this.markerClicked}
                 remarks={this.state.remarks}
                 groupedRemarks={this.state.groupedRemarks}

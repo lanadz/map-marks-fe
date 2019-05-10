@@ -13,12 +13,12 @@ class Map extends Component {
     zoom: 1
   };
 
-  onMapDrag(map) {
+  onMapChange(map) {
     // We receive here many interesting metrics, for example north east, north west
     // south east, south west coordinates. So we can calculate visible radius. And later
     // use it for fetching remarks for particular radius
-    let renderedCenter = { lat: map.center.lat, lng: map.center.lng };
-    this.props.onMapCenterChange(renderedCenter);
+    let renderedCenterAndZoom = { center: {lat: map.center.lat, lng: map.center.lng}, zoom: map.zoom };
+    this.props.onMapChange(renderedCenterAndZoom);
   };
 
   render() {
@@ -28,7 +28,7 @@ class Map extends Component {
           bootstrapURLKeys={{ key: process.env.REACT_APP_MAPS_API_KEY, language: 'uk', region: 'uk' }} // enable later
           center={this.props.center}
           zoom={this.props.zoom}
-          onChange={(map) => this.onMapDrag(map)}
+          onChange={(map) => this.onMapChange(map)}
           yesIWantToUseGoogleMapApiInternals
         >
           <LocationMarker
