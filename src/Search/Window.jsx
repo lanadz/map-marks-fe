@@ -1,26 +1,48 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import './Window.sass';
 
-const Remark = props => (
+const Remark = ({
+  distance, body, user_name: userName, created_at: createdAt,
+}) => (
   <div className="remark">
     <div className="distance">
       <span className="icon">
         <i className="fa fa-map-marker" />
       </span>
       <br />
-      {props.distance}
-m
+      {distance}
+
     </div>
 
     <div className="body">
-      <span className="name">{props.user_name}</span>
-      <span>{props.body}</span>
-      <div className="date">{props.created_at}</div>
+      <span className="name">{userName}</span>
+      <span>{body}</span>
+      <div className="date">{createdAt}</div>
     </div>
   </div>
 );
 
+Remark.propTypes = {
+  distance: PropTypes.number,
+  user_name: PropTypes.string.isRequired,
+  created_at: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+};
+
+Remark.defaultProps = {
+  distance: 0,
+};
+
 class SearchWindow extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    active: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+    remarks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,14 +59,19 @@ class SearchWindow extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+
+    const { onSubmit } = this.props;
     const { query } = this.state;
-    this.props.onSubmit(query);
+
+    onSubmit(query);
   }
 
   render() {
+    const { active, onClose, remarks } = this.props;
+    const { query } = this.state;
     return (
-      <div className={`container search ${this.props.active}`}>
-        <div className="delete" onClick={this.props.onClose} />
+      <div className={`container search ${active}`}>
+        <div className="delete" onClick={onClose} />
 
         <form className="form">
           <div className="field has-addons is-fullwidth">
@@ -53,7 +80,7 @@ class SearchWindow extends Component {
                 className="input"
                 name="searchQuery"
                 type="text"
-                value={this.state.query}
+                value={query}
                 onChange={this.handleChange}
                 placeholder="Find remark"
               />
@@ -68,7 +95,7 @@ class SearchWindow extends Component {
         </form>
 
         <div className="wrapper">
-          {this.props.remarks.map((remark, index) => <Remark key={index} {...remark} />)}
+          {remarks.map(remark => <Remark key={remark.id} {...remark} />)}
         </div>
       </div>
     );
