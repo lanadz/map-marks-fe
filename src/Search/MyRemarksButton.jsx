@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class MyRemarksButton extends Component {
-  render() {
-    return (
-      <span className="icon" onClick={this.props.onClick}>
-        <i className="fa fa-id-card fa-2x" />
-      </span>
-    );
-  }
-}
+const MyRemarksButton = ({ onClick }) => (
+  <span className="icon" onClick={onClick}>
+    <i className="fa fa-id-card fa-2x" />
+  </span>
+);
+
+MyRemarksButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default MyRemarksButton;
