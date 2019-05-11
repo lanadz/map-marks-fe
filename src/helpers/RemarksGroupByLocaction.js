@@ -49,13 +49,14 @@ const proximity = (coord, zoomLevel) => {
   // 8        0.00000001       1.11 mm
 let precision = 0;
 
-if (zoomLevel < 11 && zoomLevel >= 1) {
+if (zoomLevel < 10 && zoomLevel >= 1) {
   precision = 1;
 
   return coord.toFixed(precision);
 }
 
 switch (zoomLevel) {
+  case 10:
   case 11:
     precision = 2;
     break;
