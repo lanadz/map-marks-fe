@@ -1,46 +1,45 @@
 function ApiClient(resourceURI, options, callback) {
-  let headers = new Headers();
+  const headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
   for (const header in options.headers) {
     headers.append(header, options.headers[header]);
   }
 
-  let baseURI = process.env.REACT_APP_API_URL;
+  const baseURI = process.env.REACT_APP_API_URL;
 
-  let init = {
+  const init = {
     method: options.method || 'GET',
-    headers: headers,
+    headers,
     mode: 'cors',
-    body: options.body
+    body: options.body,
   };
 
-  var request = '';
+  let request = '';
 
   request = new Request(baseURI + resourceURI, init);
 
-  fetch(request).then(function (response) {
-    let json = response.json();
+  fetch(request).then((response) => {
+    const json = response.json();
 
     if (response.ok) {
       return json;
-    } else {
-      if (response.status === 401) {
-        return json.then(error => {
-          throw new UnauthorisedException(error);
-        });
-      }
-      return json.then(error => {
-        throw error;
+    }
+    if (response.status === 401) {
+      return json.then((error) => {
+        throw new UnauthorisedException(error);
       });
     }
+    return json.then((error) => {
+      throw error;
+    });
   }).then((json) => {
-    callback(null, json['data']);
+    callback(null, json.data);
   }).catch((error) => {
     if (error instanceof UnauthorisedException) {
-      console.log('Unauthorised: ' + error);
+      console.log(`Unauthorised: ${error}`);
     } else {
-      console.log('There has been a problem with your fetch operation: ' + error);
+      console.log(`There has been a problem with your fetch operation: ${error}`);
       callback(error, {});
     }
   });

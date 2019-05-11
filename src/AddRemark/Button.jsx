@@ -4,7 +4,7 @@ class Button extends Component {
   render() {
     return (
       <span className="icon" onClick={this.props.onClick}>
-        <i className="fa fa-search fa-2x"></i>
+        <i className="fa fa-plus fa-2x" />
       </span>
     );
   }

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Button extends Component {
+class MyRemarksButton extends Component {
   render() {
     return (
       <span className="icon" onClick={this.props.onClick}>
-        <i className="fa fa-plus fa-2x"></i>
+        <i className="fa fa-id-card fa-2x" />
       </span>
     );
   }
 }
 
-export default Button;
+export default MyRemarksButton;

@@ -3,6 +3,6 @@ import ReactDOM from 'react-dom';
 import Window from './Window';
 
 it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<Window />, div);
+  const div = document.createElement('div');
+  ReactDOM.render(<Window />, div);
 });

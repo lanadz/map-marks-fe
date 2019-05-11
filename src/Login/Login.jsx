@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Login.sass';
 
 class Login extends Component {
@@ -11,14 +11,14 @@ class Login extends Component {
   }
 
   handleChange(event) {
-    this.setState({name: event.target.value});
+    this.setState({ name: event.target.value });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let { name } = this.state;
+    const { name } = this.state;
     if (name.length > 0) {
-      this.props.onLogin({ user: { name: name } });
+      this.props.onLogin({ user: { name } });
     }
   }
 
@@ -27,14 +27,15 @@ class Login extends Component {
       <section className="section login">
         <div>
           <div className="logo-content">
-            <img alt="logo" className="logo" src={process.env.PUBLIC_URL + '/logo_title.svg'}></img>
+            <img alt="logo" className="logo" src={`${process.env.PUBLIC_URL}/logo_title.svg`} />
           </div>
 
           <div className="form">
             <form action="">
               <div className="field">
                 <div className="control has-icons-left">
-                  <input className="input"
+                  <input
+                    className="input"
                     name="username"
                     type="text"
                     value={this.state.userName}
@@ -42,19 +43,20 @@ class Login extends Component {
                     placeholder="Jane Doe"
                   />
                   <span className="icon is-small is-left">
-                    <i className="fa fa-user"></i>
+                    <i className="fa fa-user" />
                   </span>
                 </div>
               </div>
 
               <div className="field">
                 <p className="control">
-                  <button type="submit"
+                  <button
+                    type="submit"
                     className="button is-primary is-fullwidth"
                     onClick={this.handleSubmit}
                   >
                     Enter
-                </button>
+                  </button>
                 </p>
               </div>
             </form>

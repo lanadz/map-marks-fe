@@ -1,31 +1,30 @@
 import React, { Component } from 'react';
 import './Window.sass';
 
-const Remark = (props) => {
-  return (
-    <div className="remark">
-      <div className="distance">
-        <span className="icon">
-          <i className="fa fa-map-marker"></i>
-        </span>
-        <br />
-        {props.distance}m
-      </div>
-
-      <div className="body">
-        <span className="name">{props.user_name}</span>
-        <span>{props.body}</span>
-        <div className="date">{props.created_at}</div>
-      </div>
+const Remark = props => (
+  <div className="remark">
+    <div className="distance">
+      <span className="icon">
+        <i className="fa fa-map-marker" />
+      </span>
+      <br />
+      {props.distance}
+m
     </div>
-  );
-}
+
+    <div className="body">
+      <span className="name">{props.user_name}</span>
+      <span>{props.body}</span>
+      <div className="date">{props.created_at}</div>
+    </div>
+  </div>
+);
 
 class SearchWindow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: ""
+      query: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -38,19 +37,20 @@ class SearchWindow extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    let { query } = this.state;
+    const { query } = this.state;
     this.props.onSubmit(query);
   }
 
   render() {
     return (
       <div className={`container search ${this.props.active}`}>
-        <div className="delete" onClick={this.props.onClose}></div>
+        <div className="delete" onClick={this.props.onClose} />
 
         <form className="form">
           <div className="field has-addons is-fullwidth">
             <div className="control has-icons-left">
-              <input className="input"
+              <input
+                className="input"
                 name="searchQuery"
                 type="text"
                 value={this.state.query}
@@ -58,7 +58,7 @@ class SearchWindow extends Component {
                 placeholder="Find remark"
               />
               <span className="icon is-small is-left">
-                <i className="fa fa-search"></i>
+                <i className="fa fa-search" />
               </span>
             </div>
             <div className="control">

@@ -1,4 +1,4 @@
-import './Map.sass'
+import './Map.sass';
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import LocationMarker from '../Markers/LocationMarker';
@@ -8,18 +8,18 @@ class Map extends Component {
   static defaultProps = {
     center: {
       lat: 1,
-      lng: 100
+      lng: 100,
     },
-    zoom: 1
+    zoom: 1,
   };
 
   onMapChange(map) {
     // We receive here many interesting metrics, for example north east, north west
     // south east, south west coordinates. So we can calculate visible radius. And later
     // use it for fetching remarks for particular radius
-    let renderedCenterAndZoom = { center: {lat: map.center.lat, lng: map.center.lng}, zoom: map.zoom };
+    const renderedCenterAndZoom = { center: { lat: map.center.lat, lng: map.center.lng }, zoom: map.zoom };
     this.props.onMapChange(renderedCenterAndZoom);
-  };
+  }
 
   render() {
     return (
@@ -28,7 +28,7 @@ class Map extends Component {
           bootstrapURLKeys={{ key: process.env.REACT_APP_MAPS_API_KEY, language: 'uk', region: 'uk' }} // enable later
           center={this.props.center}
           zoom={this.props.zoom}
-          onChange={(map) => this.onMapChange(map)}
+          onChange={map => this.onMapChange(map)}
           yesIWantToUseGoogleMapApiInternals
         >
           <LocationMarker
@@ -36,7 +36,7 @@ class Map extends Component {
             lng={this.props.center.lng}
           />
 
-          {this.props.groupedRemarks.map((remark, index) =>
+          {this.props.groupedRemarks.map((remark, index) => (
             <RemarkMarkerButton
               key={index}
               groupId={index}
@@ -45,7 +45,7 @@ class Map extends Component {
               lng={remark.lng}
               onClick={this.props.onMarkerClick}
             />
-          )}
+          ))}
         </GoogleMapReact>
       </div>
     );

@@ -5,7 +5,7 @@ class Window extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      body: ""
+      body: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.submit = this.submit.bind(this);
@@ -16,24 +16,31 @@ class Window extends Component {
   }
 
   submit() {
-    let { body } = this.state;
+    const { body } = this.state;
 
     if (body.length > 0) {
       this.props.onSubmit(this.state.body);
       this.props.onClose();
-      this.setState({ body: "" });
+      this.setState({ body: '' });
     }
   }
 
   render() {
     return (
       <div className={`container add-remark-dialog ${this.props.active}`}>
-        <div className="delete" onClick={this.props.onClose}></div>
-        <div><strong>{this.props.username} says:</strong></div>
+        <div className="delete" onClick={this.props.onClose} />
+        <div>
+          <strong>
+            {this.props.username}
+            {' '}
+says:
+          </strong>
+        </div>
         <form className="form">
           <div className="field textarea-wrapper">
             <div className="control">
-              <textarea className="textarea has-fixed-size"
+              <textarea
+                className="textarea has-fixed-size"
                 name="body"
                 value={this.state.body}
                 onChange={this.handleChange}

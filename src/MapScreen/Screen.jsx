@@ -12,7 +12,7 @@ class Screen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAddRemarkDialog: false
+      showAddRemarkDialog: false,
     };
     this.toggleAddRemarkDialog = this.toggleAddRemarkDialog.bind(this);
   }
@@ -22,7 +22,7 @@ class Screen extends Component {
   }
 
   cssActiveClassFor(condition) {
-    return condition ? "active" : "";
+    return condition ? 'active' : '';
   }
 
   render() {
@@ -47,7 +47,7 @@ class Screen extends Component {
               <AddRemarkButton onClick={this.toggleAddRemarkDialog} />
             </div>
             <div className="navbar-item">
-              <MyRemarksButton onClick={this.props.onMyRemarksSearchClick}/>
+              <MyRemarksButton onClick={this.props.onMyRemarksSearchClick} />
             </div>
           </div>
 
@@ -57,8 +57,7 @@ class Screen extends Component {
             onSubmit={this.props.onRemarkSubmit}
             username={this.props.username}
             active={this.cssActiveClassFor(this.state.showAddRemarkDialog)}
-          >
-          </RemarkDialog>
+          />
           <ListRemarks
             remarks={this.props.selectedRemarks}
             active={this.cssActiveClassFor(this.props.showListRemarksDialog)}

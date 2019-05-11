@@ -13,7 +13,7 @@ class RemarkMarkerButton extends Component {
 
   render() {
     return (
-      <div onClick={this.handleClick} >
+      <div onClick={this.handleClick}>
         <RemarkMarker {...this.props} />
       </div>
     );
