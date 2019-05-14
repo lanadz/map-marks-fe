@@ -7,30 +7,6 @@
 //   remarks: [remarkObj, remarkObj, remarkObj]
 // }
 //
-
-const RemarksGroupByLocaction = (remarks, zoomLevel = 13) => {
-  const groupedRemarks = [];
-
-  for (const remark of remarks) {
-    const group = groupedRemarks.find(r => r.lng === proximity(remark.lng, zoomLevel)
-          && r.lat === proximity(remark.lat, zoomLevel));
-
-    if (group) {
-      group.count++;
-      group.remarks.push(remark);
-    } else {
-      groupedRemarks.push({
-        count: 1,
-        lng: proximity(remark.lng, zoomLevel),
-        lat: proximity(remark.lat, zoomLevel),
-        remarks: [remark],
-      });
-    }
-  }
-
-  return groupedRemarks;
-};
-
 const proximity = (coord, zoomLevel) => {
   // decimal
   // places   degrees          distance
@@ -82,5 +58,30 @@ const proximity = (coord, zoomLevel) => {
   return coord.toFixed(precision);
 };
 
+const RemarksGroupByLocaction = (remarks, zoomLevel = 13) => {
+  const groupedRemarks = [];
+
+  let index = 0;
+  remarks.forEach((remark) => {
+    const group = groupedRemarks.find(r => r.lng === proximity(remark.lng, zoomLevel)
+      && r.lat === proximity(remark.lat, zoomLevel));
+
+    if (group) {
+      group.count += 1;
+      group.remarks.push(remark);
+    } else {
+      groupedRemarks.push({
+        id: index,
+        count: 1,
+        lng: proximity(remark.lng, zoomLevel),
+        lat: proximity(remark.lat, zoomLevel),
+        remarks: [remark],
+      });
+      index += 1;
+    }
+  });
+
+  return groupedRemarks;
+};
 
 export default RemarksGroupByLocaction;

@@ -1,9 +1,17 @@
+/* eslint-disable no-console */
+function UnauthorisedException(error) {
+  this.status = 401;
+  this.toString = () => (`Access denied. ${error}`);
+}
+
 function ApiClient(resourceURI, options, callback) {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
-  for (const header in options.headers) {
-    headers.append(header, options.headers[header]);
+  if (options.headers) {
+    options.headers.forEach((header) => {
+      headers.append(header, options.headers[header]);
+    });
   }
 
   const baseURI = process.env.REACT_APP_API_URL;
@@ -37,19 +45,12 @@ function ApiClient(resourceURI, options, callback) {
     callback(null, json.data);
   }).catch((error) => {
     if (error instanceof UnauthorisedException) {
-      console.log(`Unauthorised: ${error}`);
+      console.worn(error);
     } else {
-      console.log(`There has been a problem with your fetch operation: ${error}`);
+      console.worn(`There has been a problem with your fetch operation: ${error}`);
       callback(error, {});
     }
   });
-}
-
-function UnauthorisedException(error) {
-  this.status = 401;
-  this.toString = function () {
-    return 'Access denied.';
-  };
 }
 
 export default ApiClient;

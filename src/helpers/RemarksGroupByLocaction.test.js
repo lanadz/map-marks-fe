@@ -28,12 +28,14 @@ describe('It groups remarks by location and respects zoom level', () => {
 
     const expectedGrouping = [
       {
+        id: 0,
         count: 2,
         lat: '1.3109',
         lng: '103.8951',
         remarks: [remark1, remark3],
       },
       {
+        id: 1,
         count: 1,
         lat: '2.3109',
         lng: '105.8951',
@@ -109,6 +111,7 @@ describe('It groups remarks by location and respects zoom level', () => {
 
     const expectedGroupingForTheBiggestZoom = [
       {
+        id: 0,
         count: 5,
         lat: '109.0',
         lng: '109.0',
@@ -121,12 +124,14 @@ describe('It groups remarks by location and respects zoom level', () => {
         ],
       },
       {
+        id: 1,
         count: 1,
         lat: '109.1',
         lng: '109.1',
         remarks: [remarkDecPlace2],
       },
       {
+        id: 2,
         count: 1,
         lat: '109.9',
         lng: '109.9',

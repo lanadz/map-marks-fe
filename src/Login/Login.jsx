@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Login.sass';
 
 class Login extends Component {
+  static propTypes = {
+    onLogin: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = { name: '' };
@@ -17,12 +22,14 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { name } = this.state;
+    const { onLogin } = this.props;
     if (name.length > 0) {
-      this.props.onLogin({ user: { name } });
+      onLogin({ user: { name } });
     }
   }
 
   render() {
+    const { userName } = this.state;
     return (
       <section className="section login">
         <div>
@@ -38,7 +45,7 @@ class Login extends Component {
                     className="input"
                     name="username"
                     type="text"
-                    value={this.state.userName}
+                    value={userName}
                     onChange={this.handleChange}
                     placeholder="Jane Doe"
                   />

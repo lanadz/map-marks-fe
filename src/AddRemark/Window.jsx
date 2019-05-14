@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Window.sass';
 
 class Window extends Component {
+  static propTypes = {
+    username: PropTypes.string.isRequired,
+    active: PropTypes.string,
+    onSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    active: '',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,21 +29,24 @@ class Window extends Component {
 
   submit() {
     const { body } = this.state;
-
+    const { onSubmit, onClose } = this.props;
     if (body.length > 0) {
-      this.props.onSubmit(this.state.body);
-      this.props.onClose();
+      onSubmit(body);
+      onClose();
       this.setState({ body: '' });
     }
   }
 
   render() {
+    const { username, onClose, active } = this.props;
+    const { body } = this.state;
+
     return (
-      <div className={`container add-remark-dialog ${this.props.active}`}>
-        <div className="delete" onClick={this.props.onClose} />
+      <div className={`container add-remark-dialog ${active}`}>
+        <div className="delete" onClick={onClose} />
         <div>
           <strong>
-            {this.props.username}
+            {username}
             {' '}
 says:
           </strong>
@@ -42,7 +57,7 @@ says:
               <textarea
                 className="textarea has-fixed-size"
                 name="body"
-                value={this.state.body}
+                value={body}
                 onChange={this.handleChange}
                 placeholder="Say something about this place.."
               />

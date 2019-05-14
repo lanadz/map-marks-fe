@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import './App.sass';
@@ -44,8 +45,16 @@ class App extends Component {
     this.toggleFilterMyRemarks = this.toggleFilterMyRemarks.bind(this);
   }
 
+  componentDidMount() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => this.setCurrentLocation(position));
+    } else {
+      console.warn('Error: The Geolocation service failed.');
+    }
+  }
+
   setCurrentLocation(position) {
-    this.setState((state, props) => ({
+    this.setState(() => ({
       currentLocation: {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -53,61 +62,7 @@ class App extends Component {
     }));
   }
 
-  login(loginInfo) {
-    this.setState(
-      {
-        user: {
-          name: loginInfo.user.name,
-        },
-        loggedIn: true,
-      },
-    );
-  }
-
-  remarkSubmit(remarkBody) {
-    const body = {
-      remark: {
-        body: remarkBody,
-        user_name: this.state.user.name,
-        lat: this.state.currentLocation.lat,
-        lng: this.state.currentLocation.lng,
-      },
-    };
-
-    ApiClient('/remarks.json',
-      {
-        method: 'POST',
-        body:
-          JSON.stringify(body),
-      },
-      (error, json) => {
-        if (error) {
-          console.log('Error: ', error);
-        } else {
-          this.getRemarks(this.state.mapCenter);
-        }
-      });
-  }
-
-  mapChanged(currentMapState) {
-    const { mapCenter } = this.state;
-    const { mapZoom } = this.state;
-
-    if (!Object.is(currentMapState.center, mapCenter) || !Object.is(currentMapState.zoom, mapZoom)) {
-      this.getRemarks(currentMapState);
-      this.setState({ mapCenter: currentMapState.center, mapZoom: currentMapState.zoom });
-    }
-  }
-
-  markerClicked(markerGroupId) {
-    const { groupedRemarks } = this.state;
-    const group = groupedRemarks[markerGroupId];
-    this.setState({
-      selectedRemarks: group.remarks,
-      showListRemarksDialog: true,
-    });
-  }
-
+  // eslint-disable-next-line react/destructuring-assignment
   getRemarks(currentCenter, blockRefetch = this.state.showSearchDialog) {
     // TODO: Add dynamic radius. Radius in meters
     // If search field is opened
@@ -127,29 +82,67 @@ class App extends Component {
       });
   }
 
+  remarkSubmit(remarkBody) {
+    const { user, currentLocation, mapCenter } = this.state;
+    const body = {
+      remark: {
+        body: remarkBody,
+        user_name: user.name,
+        lat: currentLocation.lat,
+        lng: currentLocation.lng,
+      },
+    };
+
+    ApiClient('/remarks.json',
+      {
+        method: 'POST',
+        body:
+          JSON.stringify(body),
+      },
+      (error) => {
+        if (error) {
+          console.log('Error: ', error);
+        } else {
+          this.getRemarks(mapCenter);
+        }
+      });
+  }
+
+  login(loginInfo) {
+    this.setState(
+      {
+        user: {
+          name: loginInfo.user.name,
+        },
+        loggedIn: true,
+      },
+    );
+  }
+
   closeListRemarksDialog() {
     this.setState({ showListRemarksDialog: false });
   }
 
   toggleSearchDialog() {
-    const newValue = !this.state.showSearchDialog;
+    const { showSearchDialog, mapCenter } = this.state;
+    const newValue = !showSearchDialog;
     if (!newValue) {
       // refetch remarks to cancel any previous search
-      this.getRemarks(this.state.mapCenter, false);
+      this.getRemarks(mapCenter, false);
     }
     this.setState({ showSearchDialog: newValue });
   }
 
   toggleFilterMyRemarks() {
-    const { filterMyRemarks } = this.state;
-    this.storeRemarks(this.state.unfilteredRemarks, !filterMyRemarks);
+    const { filterMyRemarks, unfilteredRemarks } = this.state;
+    this.storeRemarks(unfilteredRemarks, !filterMyRemarks);
     this.setState({ filterMyRemarks: !filterMyRemarks });
   }
 
   searchSubmit(query) {
-    query = query.toLowerCase();
+    const queryLowerCased = query.toLowerCase();
     const { currentLocation } = this.state;
-    const params = `lat=${currentLocation.lat}&lng=${currentLocation.lng}&q=${query}`;
+    const params = `lat=${currentLocation.lat}&lng=${currentLocation.lng}&q=${queryLowerCased}`;
 
     ApiClient(`/remarks.json?${params}`,
       {},
@@ -163,63 +156,79 @@ class App extends Component {
       });
   }
 
+  // eslint-disable-next-line react/destructuring-assignment
   storeRemarks(remarksFromApi, filterMyRemarks = this.state.filterMyRemarks) {
+    const { user, mapZoom } = this.state;
     let filteredRemarks = [];
     if (filterMyRemarks) {
-      const userName = this.state.user.name;
+      const userName = user.name;
       filteredRemarks = remarksFromApi.filter(r => r.user_name === userName);
     } else {
       filteredRemarks = remarksFromApi;
     }
     this.setState({
-      groupedRemarks: RemarksGroupByLocation(filteredRemarks, this.state.mapZoom),
+      groupedRemarks: RemarksGroupByLocation(filteredRemarks, mapZoom),
       remarks: filteredRemarks,
       unfilteredRemarks: remarksFromApi,
     });
   }
 
-  componentDidMount() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => this.setCurrentLocation(position));
-    } else {
-      console.warn('Error: The Geolocation service failed.');
+  mapChanged(currentMapState) {
+    const { mapCenter } = this.state;
+    const { mapZoom } = this.state;
+
+    if (
+      !Object.is(currentMapState.center, mapCenter)
+      || !Object.is(currentMapState.zoom, mapZoom)) {
+      this.getRemarks(currentMapState);
+      this.setState({ mapCenter: currentMapState.center, mapZoom: currentMapState.zoom });
     }
+  }
+
+  markerClicked(markerGroupId) {
+    const { groupedRemarks } = this.state;
+    const group = groupedRemarks[markerGroupId];
+    this.setState({
+      selectedRemarks: group.remarks,
+      showListRemarksDialog: true,
+    });
   }
 
   render() {
     const { loggedIn } = this.state;
+    const {
+      mapZoom, currentLocation,
+      user, remarks, groupedRemarks,
+      selectedRemarks, showListRemarksDialog, showSearchDialog,
+    } = this.state;
     return (
       <div className="application">
         <Router>
           <Route
             path="/login"
             exact
-            render={props => (
-              loggedIn
-                ? (<Redirect to="/" />)
-                : (<Login onLogin={this.login} />)
-            )}
+            render={() => (loggedIn ? (<Redirect to="/" />) : (<Login onLogin={this.login} />))}
           />
 
           <Route
             path="/"
             exact
-            render={props => (
+            render={() => (
               loggedIn
                 ? (
                   <MapScreen
-                    zoom={this.state.mapZoom}
-                    center={{ lat: this.state.currentLocation.lat, lng: this.state.currentLocation.lng }}
-                    username={this.state.user.name}
+                    zoom={mapZoom}
+                    center={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+                    username={user.name}
                     onRemarkSubmit={this.remarkSubmit}
                     onMapChange={this.mapChanged}
                     onMarkerClick={this.markerClicked}
-                    remarks={this.state.remarks}
-                    groupedRemarks={this.state.groupedRemarks}
-                    selectedRemarks={this.state.selectedRemarks}
-                    showListRemarksDialog={this.state.showListRemarksDialog}
+                    remarks={remarks}
+                    groupedRemarks={groupedRemarks}
+                    selectedRemarks={selectedRemarks}
+                    showListRemarksDialog={showListRemarksDialog}
                     onCloseListRemarksDialog={this.closeListRemarksDialog}
-                    showSearchDialog={this.state.showSearchDialog}
+                    showSearchDialog={showSearchDialog}
                     onToggleSearchDialog={this.toggleSearchDialog}
                     onSearchSubmit={this.searchSubmit}
                     onMyRemarksSearchClick={this.toggleFilterMyRemarks}
